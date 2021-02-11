@@ -17,6 +17,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 test {
