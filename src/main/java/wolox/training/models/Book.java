@@ -13,7 +13,6 @@ public class Book {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column(nullable = false)
 	private String genre;
 
 	@Column(nullable = false)
@@ -38,13 +37,14 @@ public class Book {
 	private Integer pages;
 
 	@Column(nullable = false)
-	private Integer isbn;
+	private String isbn;
 
 	public Book() {
 	}
 
-	public Book(String genre, String author, String image, String title, String subtitle, String publisher, String year,
-			Integer pages, Integer isbn) {
+	public Book(long id, String genre, String author, String image, String title, String subtitle, String publisher,
+			String year, Integer pages, String isbn) {
+		this.id = id;
 		this.genre = genre;
 		this.author = author;
 		this.image = image;
@@ -54,6 +54,14 @@ public class Book {
 		this.year = year;
 		this.pages = pages;
 		this.isbn = isbn;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getGenre() {
@@ -120,11 +128,11 @@ public class Book {
 		this.pages = pages;
 	}
 
-	public Integer getIsbn() {
+	public String getIsbn() {
 		return isbn;
 	}
 
-	public void setIsbn(Integer isbn) {
+	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 }
