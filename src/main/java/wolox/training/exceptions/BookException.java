@@ -17,4 +17,7 @@ public class BookException extends RuntimeException {
 
 	}
 
+	public NotificationCode getNotificationCode() {
+		return notificationCode;
+	}
 }
