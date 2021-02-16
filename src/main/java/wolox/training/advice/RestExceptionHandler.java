@@ -12,12 +12,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookException;
 import wolox.training.exceptions.BookIdMismatchException;
-import wolox.training.exceptions.BookNotFoundException;
+import wolox.training.exceptions.DataNotFoundException;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler({BookNotFoundException.class, BookAlreadyOwnedException.class})
+	@ExceptionHandler({DataNotFoundException.class, BookAlreadyOwnedException.class})
 	protected ResponseEntity<Object> handleAllHandledExceptions(BookException exception, WebRequest request) {
 		return handleExceptionInternal(exception, exception.getNotificationCode().getMessage(), new HttpHeaders(),
 				HttpStatus.NOT_FOUND, request);

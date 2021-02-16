@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -25,6 +26,8 @@ public class Users {
 	private String name;
 
 	@Column(nullable = false)
+
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate birthdate;
 
 	@OneToMany(mappedBy = "users")
