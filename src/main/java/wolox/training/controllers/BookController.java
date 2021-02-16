@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookIdMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.NotificationCode;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
-@Controller
+@RestController
 @RequestMapping("/api/books")
 public class BookController {
 
@@ -47,6 +49,9 @@ public class BookController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Book create(@RequestBody Book book) {
+		if(bookRepository.findByUsers_Id(book.getUsers().getId()).isPresent()){
+			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
+		}
 		return bookRepository.save(book);
 	}
 

@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import org.apache.catalina.User;
 
 @Entity
 public class Book {
@@ -39,11 +42,15 @@ public class Book {
 	@Column(nullable = false)
 	private String isbn;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private Users users;
+
 	public Book() {
 	}
 
 	public Book(long id, String genre, String author, String image, String title, String subtitle, String publisher,
-			String year, Integer pages, String isbn) {
+			String year, Integer pages, String isbn, Users users) {
 		this.id = id;
 		this.genre = genre;
 		this.author = author;
@@ -54,6 +61,7 @@ public class Book {
 		this.year = year;
 		this.pages = pages;
 		this.isbn = isbn;
+		this.users = users;
 	}
 
 	public long getId() {
@@ -134,5 +142,13 @@ public class Book {
 
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
+	}
+
+	public Users getUsers() {
+		return users;
+	}
+
+	public void setUsers(Users users) {
+		this.users = users;
 	}
 }
