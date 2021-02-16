@@ -50,7 +50,7 @@ public class BookController {
 	/**
 	 * This method returns all books by author
 	 * @param author: author of the book (String)
-	 * @return Object Book
+	 * @return  {@link Book}
 	 */
 	@GetMapping("/author/{author}")
 	public Book findByAuthor(@PathVariable String author) {
@@ -60,7 +60,7 @@ public class BookController {
 	/**
 	 * This method is to create a book
 	 * @param book: author of the book (Object)
-	 * @return Object Book
+	 * @return {@link Book}
 	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -82,7 +82,7 @@ public class BookController {
 	 * This method is to update a book
 	 * @param book: author of the book (Object)
 	 * @param id: id of the book (Long)
-	 * @return Object Book
+	 * @return {@link Book}
 	 */
 	@PutMapping("/{id}")
 	public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
