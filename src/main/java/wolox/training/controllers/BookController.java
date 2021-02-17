@@ -48,7 +48,7 @@ public class BookController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Book create(@RequestBody Book book) {
-		if(bookRepository.findByAuthor(book.getIsbn()).isPresent()){
+		if(bookRepository.findByIsbn(book.getIsbn()).isPresent()){
 			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
 		}
 		return bookRepository.save(book);
