@@ -1,10 +1,13 @@
 package wolox.training.models;
 
+import java.util.LinkedList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Book {
@@ -38,12 +41,14 @@ public class Book {
 
 	@Column(nullable = false)
 	private String isbn;
+	@ManyToMany(mappedBy = "books")
+	private List<User> users = new LinkedList<>();
 
 	public Book() {
 	}
 
 	public Book(long id, String genre, String author, String image, String title, String subtitle, String publisher,
-			String year, Integer pages, String isbn) {
+			String year, Integer pages, String isbn, List<User> users) {
 		this.id = id;
 		this.genre = genre;
 		this.author = author;
@@ -54,6 +59,7 @@ public class Book {
 		this.year = year;
 		this.pages = pages;
 		this.isbn = isbn;
+		this.users = users;
 	}
 
 	public long getId() {
@@ -134,5 +140,13 @@ public class Book {
 
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 }
