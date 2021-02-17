@@ -5,18 +5,24 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
-public class Users {
+@Table(name = "users")
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "user_id")
 	private Long id;
 
 	@Column(nullable = false)
@@ -30,13 +36,17 @@ public class Users {
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate birthdate;
 
-	@OneToMany(mappedBy = "users")
+
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name = "SHARE", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, updatable = false)}, inverseJoinColumns = {
+			@JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false, updatable = false)})
 	private List<Book> books = new LinkedList<>();
 
-	public Users() {
+	public User() {
 	}
 
-	public Users(long id, String username, String name, LocalDate birthdate, List<Book> books) {
+	public User(Long id, String username, String name, LocalDate birthdate, List<Book> books) {
 		this.id = id;
 		this.username = username;
 		this.name = name;
@@ -44,11 +54,11 @@ public class Users {
 		this.books = books;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -82,5 +92,14 @@ public class Users {
 
 	public void setBooks(List<Book> books) {
 		this.books = books;
+	}
+
+	public List<Book> addBook(Book book) {
+		return Collections.singletonList(book);
+	}
+
+	public List<Book> deleteBook(List<Book> books, String isbn) {
+		books.removeIf(book -> book.getIsbn().equals(isbn));
+		return books;
 	}
 }
