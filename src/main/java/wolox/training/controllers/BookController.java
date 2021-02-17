@@ -27,6 +27,12 @@ public class BookController {
 	@Autowired
 	private BookRepository bookRepository;
 
+	/**
+	 * This method returns all books
+	 * @param defaultValue: default response value(String)
+	 * @param model: object to pass by attribute to html(Object)
+	 * @return String returns default message
+	 */
 	@GetMapping("/greeting")
 	public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name,
 			Model model) {
@@ -34,17 +40,29 @@ public class BookController {
 		return "greeting";
 	}
 
+	/**
+	 * This method returns all books
+	 * @return List<Iterable> the Book
+	 */
 	@GetMapping
 	public Iterable findAll() {
 		return bookRepository.findAll();
 	}
-
+	/**
+	 * This method returns all books by author
+	 * @param author: author of the book (String)
+	 * @return  {@link Book}
+	 */
 	@GetMapping("/author/{author}")
 	public Book findByAuthor(@PathVariable String author) {
 		return bookRepository.findByAuthor(author)
 				.orElseThrow(() -> new BookNotFoundException(NotificationCode.DATA_NOT_FOUND));
 	}
-
+	/**
+	 * This method is to create a book
+	 * @param book: author of the book (Object)
+	 * @return {@link Book}
+	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Book create(@RequestBody Book book) {
@@ -53,13 +71,23 @@ public class BookController {
 		}
 		return bookRepository.save(book);
 	}
-
+	/**
+	 * This method is to delete a book
+	 * @param id: id of the book (Long)
+	 * @return void
+	 */
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(NotificationCode.DATA_NOT_FOUND));
 		bookRepository.deleteById(id);
 	}
 
+	/**
+	 * This method is to update a book
+	 * @param book: author of the book (Object)
+	 * @param id: id of the book (Long)
+	 * @return {@link Book}
+	 */
 	@PutMapping("/{id}")
 	public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
 		if (book.getId() != id) {
