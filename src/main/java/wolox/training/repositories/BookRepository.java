@@ -7,8 +7,4 @@ import wolox.training.models.Book;
 public interface BookRepository extends CrudRepository<Book, Long> {
 
 	Optional<Book> findByAuthor(String author);
-	
-	Optional<Book> findByUsers_Id(Long id);
-
-
 }
