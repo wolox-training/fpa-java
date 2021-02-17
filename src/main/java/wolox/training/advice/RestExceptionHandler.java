@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookException;
-import wolox.training.exceptions.BookIdMismatchException;
+import wolox.training.exceptions.IdMismatchException;
 import wolox.training.exceptions.DataNotFoundException;
 
 @ControllerAdvice
@@ -23,7 +23,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				HttpStatus.NOT_FOUND, request);
 	}
 
-	@ExceptionHandler({BookIdMismatchException.class, ConstraintViolationException.class,
+	@ExceptionHandler({IdMismatchException.class, ConstraintViolationException.class,
 			DataIntegrityViolationException.class})
 	public ResponseEntity<Object> handleBadRequest(Exception ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getLocalizedMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST,

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.BookAlreadyOwnedException;
-import wolox.training.exceptions.BookIdMismatchException;
+import wolox.training.exceptions.IdMismatchException;
 import wolox.training.exceptions.DataNotFoundException;
 import wolox.training.exceptions.NotificationCode;
 import wolox.training.models.Book;
@@ -29,7 +29,7 @@ public class BookController {
 
 	/**
 	 * This method returns all books
-	 * @param defaultValue: default response value(String)
+	 * @param name: default response value(String)
 	 * @param model: object to pass by attribute to html(Object)
 	 * @return String returns default message
 	 */
@@ -91,7 +91,7 @@ public class BookController {
 	@PutMapping("/{id}")
 	public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
 		if (book.getId() != id) {
-			throw new BookIdMismatchException(NotificationCode.MISMATCH);
+			throw new IdMismatchException(NotificationCode.MISMATCH);
 		}
 		bookRepository.findById(id).orElseThrow(() -> new DataNotFoundException(NotificationCode.DATA_NOT_FOUND));
 		return bookRepository.save(book);

@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import wolox.training.exceptions.BookIdMismatchException;
+import wolox.training.exceptions.IdMismatchException;
 import wolox.training.exceptions.DataNotFoundException;
 import wolox.training.exceptions.NotificationCode;
-import wolox.training.models.Book;
 import wolox.training.models.User;
 import wolox.training.repositories.UserRepository;
 
@@ -48,12 +47,12 @@ public class UsersController {
 	/**
 	 * This method is to create a user
 	 * @param user:  user (Object)
-	 * @return {@link Book}
+	 * @return {@link User}
 	 */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public User create(@RequestBody User users) {
-		return usersRepository.save(users);
+	public User create(@RequestBody User user) {
+		return usersRepository.save(user);
 	}
 	/**
 	 * This method is to delete a user
@@ -72,11 +71,11 @@ public class UsersController {
 	 * @return {@link User}
 	 */
 	@PutMapping("/{id}")
-	public User updateBook(@RequestBody User users, @PathVariable Long id) {
-		if (users.getId() != id) {
-			throw new BookIdMismatchException(NotificationCode.MISMATCH);
+	public User update(@RequestBody User user, @PathVariable Long id) {
+		if (user.getId() != id) {
+			throw new IdMismatchException(NotificationCode.MISMATCH);
 		}
 		usersRepository.findById(id).orElseThrow(() -> new DataNotFoundException(NotificationCode.DATA_NOT_FOUND));
-		return usersRepository.save(users);
+		return usersRepository.save(user);
 	}
 }
