@@ -2,6 +2,7 @@ package wolox.training.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,9 +33,8 @@ public class User {
 
 	@Column(nullable = false)
 
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
-
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	private List<Book> books = new LinkedList<>();
@@ -91,10 +91,11 @@ public class User {
 	}
 
 	public List<Book> addBook(Book bookCurrent) {
-		if (books.stream().filter(book -> book.getIsbn().equals(bookCurrent.getIsbn())).findFirst().isPresent()) {
+		if (books.contains(bookCurrent)) {
 			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
 		}
 		books.add(bookCurrent);
+		bookCurrent.setUsers(Arrays.asList(this));
 		return books;
 
 	}
