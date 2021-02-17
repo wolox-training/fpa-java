@@ -2,7 +2,6 @@ package wolox.training.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +48,7 @@ public class BookController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Book create(@RequestBody Book book) {
-		if(bookRepository.findByAuthor(book.getIsbn()).isPresent()){
+		if(bookRepository.findByIsbn(book.getIsbn()).isPresent()){
 			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
 		}
 		return bookRepository.save(book);

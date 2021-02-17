@@ -10,10 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import wolox.training.exceptions.BookAlreadyOwnedException;
+import wolox.training.exceptions.NotificationCode;
 
 @Entity
 @Table(name = "users")
@@ -21,7 +21,6 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "user_id")
 	private Long id;
 
 	@Column(nullable = false)
@@ -35,9 +34,6 @@ public class User {
 
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "SHARE", joinColumns = {
-			@JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, updatable = false)}, inverseJoinColumns = {
-			@JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false, updatable = false)})
 	private List<Book> books = new LinkedList<>();
 
 	public User() {
@@ -91,11 +87,16 @@ public class User {
 		this.books = books;
 	}
 
-	public List<Book> addBook(Book book) {
-		return Collections.singletonList(book);
+	public List<Book> addBook(Book bookCurrent) {
+		if (books.stream().filter(book -> book.getIsbn().equals(bookCurrent.getIsbn())).findFirst().isPresent()) {
+			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
+		}
+		books.add(bookCurrent);
+		return books;
+
 	}
 
-	public List<Book> deleteBook(List<Book> books, String isbn) {
+	public List<Book> deleteBook(String isbn) {
 		books.removeIf(book -> book.getIsbn().equals(isbn));
 		return books;
 	}
