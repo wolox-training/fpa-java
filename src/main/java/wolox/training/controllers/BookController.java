@@ -90,7 +90,7 @@ public class BookController {
 	 */
 	@PutMapping("/{id}")
 	public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
-		if (book.getId() == id) {
+		if (book.getId() != id) {
 			throw new IdMismatchException(NotificationCode.BOOK_MISMATCH);
 		}
 		bookRepository.findById(id).orElseThrow(() -> new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND));

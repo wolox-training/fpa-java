@@ -20,7 +20,7 @@ import wolox.training.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/api/users")
-public class UsersController {
+public class UserController {
 
 	@Autowired
 	private UserRepository usersRepository;
@@ -96,13 +96,13 @@ public class UsersController {
 	 * @return void
 	 */
 	@DeleteMapping("/id/{userId}")
-	public void deleteBookToUser(@RequestBody List<Book> books, @PathVariable Long userId) {
+	public User deleteBookToUser(@RequestBody List<Book> books, @PathVariable Long userId) {
 		User user = usersRepository.findById(userId)
 				.orElseThrow(() -> new DataNotFoundException(NotificationCode.USER_DATA_NOT_FOUND));
 		books.forEach(book -> {
 			user.deleteBook(book.getIsbn());
 		});
-		usersRepository.save(user);
+		return usersRepository.save(user);
 	}
 	/**
 	 * This method is to create a books to user

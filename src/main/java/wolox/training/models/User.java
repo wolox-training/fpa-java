@@ -90,7 +90,7 @@ public class User {
 	}
 
 	public List<Book> addBook(Book bookCurrent) {
-		if (books.stream().filter(book -> book.getId() == bookCurrent.getId()).findFirst().isPresent()) {
+		if (books.stream().filter(book -> book.getId().equals(bookCurrent.getId())).findFirst().isPresent()) {
 			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
 		}
 		books.add(bookCurrent);
