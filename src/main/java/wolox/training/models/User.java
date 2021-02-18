@@ -2,7 +2,6 @@ package wolox.training.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,11 +90,10 @@ public class User {
 	}
 
 	public List<Book> addBook(Book bookCurrent) {
-		if (books.contains(bookCurrent)) {
+		if (books.stream().filter(book -> book.getId() == bookCurrent.getId()).findFirst().isPresent()) {
 			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
 		}
 		books.add(bookCurrent);
-		bookCurrent.setUsers(Arrays.asList(this));
 		return books;
 
 	}
