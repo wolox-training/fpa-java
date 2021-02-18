@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.BookAlreadyOwnedException;
-import wolox.training.exceptions.BookIdMismatchException;
-import wolox.training.exceptions.BookNotFoundException;
+import wolox.training.exceptions.IdMismatchException;
+import wolox.training.exceptions.DataNotFoundException;
 import wolox.training.exceptions.NotificationCode;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
@@ -29,7 +29,7 @@ public class BookController {
 
 	/**
 	 * This method returns all books
-	 * @param defaultValue: default response value(String)
+	 * @param name: default response value(String)
 	 * @param model: object to pass by attribute to html(Object)
 	 * @return String returns default message
 	 */
@@ -56,7 +56,7 @@ public class BookController {
 	@GetMapping("/author/{author}")
 	public Book findByAuthor(@PathVariable String author) {
 		return bookRepository.findByAuthor(author)
-				.orElseThrow(() -> new BookNotFoundException(NotificationCode.DATA_NOT_FOUND));
+				.orElseThrow(() -> new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND));
 	}
 	/**
 	 * This method is to create a book
@@ -78,7 +78,7 @@ public class BookController {
 	 */
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
-		bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(NotificationCode.DATA_NOT_FOUND));
+		bookRepository.findById(id).orElseThrow(() -> new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND));
 		bookRepository.deleteById(id);
 	}
 
@@ -91,9 +91,9 @@ public class BookController {
 	@PutMapping("/{id}")
 	public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
 		if (book.getId() != id) {
-			throw new BookIdMismatchException(NotificationCode.MISMATCH);
+			throw new IdMismatchException(NotificationCode.BOOK_MISMATCH);
 		}
-		bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(NotificationCode.DATA_NOT_FOUND));
+		bookRepository.findById(id).orElseThrow(() -> new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND));
 		return bookRepository.save(book);
 	}
 
