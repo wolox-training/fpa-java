@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import wolox.training.exceptions.DataNotFoundException;
+import wolox.training.exceptions.IdMismatchException;
 import wolox.training.exceptions.NotificationCode;
 import wolox.training.models.Book;
 import wolox.training.models.User;
@@ -20,7 +21,7 @@ import wolox.training.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/api/users")
-public class UsersController {
+public class UserController {
 
 	@Autowired
 	private UserRepository usersRepository;
@@ -84,6 +85,9 @@ public class UsersController {
 	 */
 	@PutMapping("/{id}")
 	public User update(@RequestBody User user, @PathVariable Long id) {
+		if (user.getId() != id) {
+			throw new IdMismatchException(NotificationCode.USER_MISMATCH);
+		}
 		usersRepository.findById(id).orElseThrow(() -> new DataNotFoundException(NotificationCode.USER_DATA_NOT_FOUND));
 		return usersRepository.save(user);
 	}
@@ -96,13 +100,13 @@ public class UsersController {
 	 * @return void
 	 */
 	@DeleteMapping("/id/{userId}")
-	public void deleteBookToUser(@RequestBody List<Book> books, @PathVariable Long userId) {
+	public User deleteBookToUser(@RequestBody List<Book> books, @PathVariable Long userId) {
 		User user = usersRepository.findById(userId)
 				.orElseThrow(() -> new DataNotFoundException(NotificationCode.USER_DATA_NOT_FOUND));
 		books.forEach(book -> {
 			user.deleteBook(book.getIsbn());
 		});
-		usersRepository.save(user);
+		return usersRepository.save(user);
 	}
 	/**
 	 * This method is to create a books to user
