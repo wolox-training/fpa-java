@@ -1,5 +1,9 @@
 package wolox.training.controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -22,6 +26,7 @@ import wolox.training.repositories.BookRepository;
 
 @RestController
 @RequestMapping("/api/books")
+@Api
 public class BookController {
 
 	@Autowired
@@ -53,6 +58,14 @@ public class BookController {
 	 * @param author: author of the book (String)
 	 * @return  {@link Book}
 	 */
+
+	@ApiOperation(value = "Giving and author the book", response = Book.class)
+	@ApiResponses(value = {
+			@ApiResponse(code=200,message = "Successfully retrieved book"),
+			@ApiResponse(code=401,message = "You are not Authorized to view the resource"),
+			@ApiResponse(code=403,message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code =404,message = "The Resource you were trying to reach is not found")
+	})
 	@GetMapping("/author/{author}")
 	public Book findByAuthor(@PathVariable String author) {
 		return bookRepository.findByAuthor(author)
