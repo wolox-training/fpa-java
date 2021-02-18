@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.LinkedList;
@@ -10,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import wolox.training.constant.MessageValidation;
+import wolox.training.utils.ValidationPreconditionUtil;
 
 @Entity
 @ApiModel(description = "Books from the OpenLibrary")
@@ -71,6 +74,7 @@ public class Book {
 	}
 
 	public void setId(Long id) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(id,"id");
 		this.id = id;
 	}
 
@@ -87,6 +91,7 @@ public class Book {
 	}
 
 	public void setAuthor(String author) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(author,"author");
 		this.author = author;
 	}
 
@@ -95,6 +100,7 @@ public class Book {
 	}
 
 	public void setImage(String image) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(image,"image");
 		this.image = image;
 	}
 
@@ -103,6 +109,7 @@ public class Book {
 	}
 
 	public void setTitle(String title) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(title,"title");
 		this.title = title;
 	}
 
@@ -111,6 +118,7 @@ public class Book {
 	}
 
 	public void setSubtitle(String subtitle) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(subtitle,"subtitle");
 		this.subtitle = subtitle;
 	}
 
@@ -119,6 +127,7 @@ public class Book {
 	}
 
 	public void setPublisher(String publisher) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(publisher,"publisher");
 		this.publisher = publisher;
 	}
 
@@ -127,6 +136,7 @@ public class Book {
 	}
 
 	public void setYear(String year) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(year,"year");
 		this.year = year;
 	}
 
@@ -135,6 +145,7 @@ public class Book {
 	}
 
 	public void setPages(Integer pages) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(pages,"pages");
 		this.pages = pages;
 	}
 
@@ -143,6 +154,7 @@ public class Book {
 	}
 
 	public void setIsbn(String isbn) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(isbn,"isbn");
 		this.isbn = isbn;
 	}
 
@@ -153,4 +165,6 @@ public class Book {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
+
 }

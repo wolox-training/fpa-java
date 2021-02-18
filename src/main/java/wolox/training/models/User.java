@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.NotificationCode;
+import wolox.training.utils.ValidationPreconditionUtil;
 
 @Entity
 @Table(name = "users")
@@ -35,7 +36,6 @@ public class User {
 	private String name;
 
 	@Column(nullable = false)
-
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
 
@@ -58,6 +58,7 @@ public class User {
 	}
 
 	public void setId(Long id) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(id,"id");
 		this.id = id;
 	}
 
@@ -66,6 +67,7 @@ public class User {
 	}
 
 	public void setUsername(String username) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(username,"username");
 		this.username = username;
 	}
 
@@ -74,6 +76,7 @@ public class User {
 	}
 
 	public void setName(String name) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(name,"name");
 		this.name = name;
 	}
 
@@ -82,6 +85,7 @@ public class User {
 	}
 
 	public void setBirthdate(LocalDate birthdate) {
+		ValidationPreconditionUtil.validateFieldCheckNotNull(birthdate,"birthdate");
 		this.birthdate = birthdate;
 	}
 
