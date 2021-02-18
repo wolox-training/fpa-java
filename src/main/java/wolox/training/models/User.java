@@ -1,6 +1,8 @@
 package wolox.training.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -18,12 +20,14 @@ import wolox.training.exceptions.NotificationCode;
 
 @Entity
 @Table(name = "users")
+@ApiModel(description = "Users from the OpenLibrary")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@ApiModelProperty("The User username")
 	@Column(nullable = false)
 	private String username;
 
