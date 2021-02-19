@@ -25,6 +25,7 @@ public class UserRepositoryTest {
 	@Test
 	public void whenCreateUser_thenUserIsPersisted() {
 		//Act
+		userRepository.save(userOneTest);
 		User user = userRepository.findByUsername("PACHECO").orElse(new User());
 		//Assert
 		Assertions.assertThat(user.getUsername().equals(userOneTest.getUsername())).isTrue();

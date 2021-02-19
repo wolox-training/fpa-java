@@ -27,7 +27,7 @@ import wolox.training.utils.JsonUtil;
 public class BookControllerTest {
 
 	private static  final String AUTHOR ="pacheco";
-	private static  final String ISBN ="123";
+	private static  final String ISBN ="12356";
 	private static  final Long ID_USER = 1l;
 
 	@Autowired
@@ -51,6 +51,15 @@ public class BookControllerTest {
 		return bookBuilder;
 	}
 
+	@Test
+	public void createBooks() throws Exception {
+		Book book = bookBuilder();
+		book.setIsbn("554545");
+		mockMvc.perform(post("/api/books")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.asJsonString(book)))
+				.andExpect(status().isCreated());
+	}
 
 	@Test
 	public void findAll() throws Exception {
@@ -72,13 +81,7 @@ public class BookControllerTest {
 						.andExpect(jsonPath("$.isbn", is(ISBN)));
 	}
 
-	@Test
-	public void createBooks() throws Exception {
-		mockMvc.perform(post("/api/books")
-				.contentType(MediaType.APPLICATION_JSON)
-					.content(JsonUtil.asJsonString(bookBuilder())))
-						.andExpect(status().isCreated());
-	}
+
 
 	@Test
 	public void deleteBook() throws Exception {
@@ -93,6 +96,7 @@ public class BookControllerTest {
 	public void updateBook() throws Exception {
 		Book book = bookRepository.save(bookBuilder());
 		book.setAuthor("Marcelo");
+		book.setUsers(null);
 
 		mockMvc.perform(put("/api/books/{id}",ID_USER)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -100,5 +104,7 @@ public class BookControllerTest {
 				.andExpect(status().isOk()).andExpect(jsonPath("$.author", is("Marcelo")));;
 
 	}
+
+
 
 }
