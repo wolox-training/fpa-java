@@ -33,64 +33,68 @@ public class UserControllerTest {
 	@Autowired
 	private UserRepository userRepository;
 
-	private static final String USERNAME = "PACHECO";
-	private static  final Long ID_USER = 1l;
+	private static final Long ID_USER = 1l;
 
-	private  User userBuilder(){
+	private User userBuilder() {
 		User user = new User();
 		user.setId(ID_USER);
-		user.setUsername(USERNAME);
 		user.setName("manuel");
-		user.setBirthdate(LocalDate.of(2020,1,1));
+		user.setBirthdate(LocalDate.of(2020, 1, 1));
 		return user;
 	}
 
 	@Test
 	public void findAll() throws Exception {
-		userRepository.save(userBuilder());
+		User user = userBuilder();
+		user.setUsername("USERNAME1");
+		userRepository.save(user);
 
-		mockMvc.perform(get("/api/users")
-				.contentType(MediaType.APPLICATION_JSON))
-					.andExpect(status().isOk())
-						.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-							.andExpect(jsonPath("$[0].username", is(USERNAME)));
+		mockMvc.perform(get("/api/users").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$[0].username", is("USERNAME1")));
 	}
 
 	@Test
 	public void findByUsername() throws Exception {
-		userRepository.save(userBuilder());
+		User user = userBuilder();
+		user.setUsername("USERNAME2");
+		userRepository.save(user);
 
-		mockMvc.perform(get("/api/users/username/{username}", USERNAME)
-				.contentType(MediaType.APPLICATION_JSON))
+		mockMvc.perform(get("/api/users/username/{username}", "USERNAME2").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.username", is(USERNAME)));
+				.andExpect(jsonPath("$.username", is("USERNAME2")));
 	}
 
 	@Test
-	public  void createUser() throws Exception {
-		mockMvc.perform(post("/api/users")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtil.asJsonString(userBuilder())))
-				.andExpect(status().isCreated());
+	public void createUser() throws Exception {
+		User user = userBuilder();
+		user.setUsername("USERNAME4");
+		mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.asJsonString(user))).andExpect(status().isCreated());
 	}
+
 	@Test
 	public void deleteUser() throws Exception {
-		userRepository.save(userBuilder());
+		User user = userBuilder();
+		user.setUsername("USERNAME3");
+		userRepository.save(user);
 
-		mockMvc.perform(delete("/api/users/{id}", ID_USER)
-				.accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(delete("/api/users/{id}", ID_USER).accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk());
 	}
 
 	@Test
 	public void updateUser() throws Exception {
-		User user = userRepository.save(userBuilder());
-		user.setName("Marcelo");
+		User user = userBuilder();
+		user.setUsername("USERNAME3");
+		User userSave = userRepository.save(user);
 
-		mockMvc.perform(put("/api/users/{id}",ID_USER)
-				.contentType(MediaType.APPLICATION_JSON)
-					.content(JsonUtil.asJsonString(user)))
-						.andExpect(status().isOk()).andExpect(jsonPath("$.name", is("Marcelo")));;
+		userSave.setName("marcelo");
+
+		mockMvc.perform(put("/api/users/{id}", ID_USER).contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.asJsonString(userSave))).andExpect(status().isOk())
+				.andExpect(jsonPath("$.name", is("marcelo")));
+		;
 
 	}
 
