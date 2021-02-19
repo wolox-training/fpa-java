@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.models.Book;
+import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.utils.JsonUtil;
 
@@ -26,9 +27,8 @@ import wolox.training.utils.JsonUtil;
 @AutoConfigureMockMvc
 public class BookControllerTest {
 
-	private static  final String AUTHOR ="pacheco";
-	private static  final String ISBN ="12356";
-	private static  final Long ID_USER = 1l;
+	private static final String ISBN = "12356";
+	private static final Long ID_USER = 1l;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -39,7 +39,6 @@ public class BookControllerTest {
 	private Book bookBuilder() {
 		Book bookBuilder = new Book();
 		bookBuilder.setId(ID_USER);
-		bookBuilder.setAuthor(AUTHOR);
 		bookBuilder.setGenre("M");
 		bookBuilder.setImage("xxxx");
 		bookBuilder.setTitle("cien anios de soledad");
@@ -54,57 +53,60 @@ public class BookControllerTest {
 	@Test
 	public void createBooks() throws Exception {
 		Book book = bookBuilder();
+		book.setAuthor("author4");
 		book.setIsbn("554545");
-		mockMvc.perform(post("/api/books")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtil.asJsonString(book)))
+		mockMvc.perform(post("/api/books").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.asJsonString(book)))
 				.andExpect(status().isCreated());
 	}
 
 	@Test
 	public void findAll() throws Exception {
-		bookRepository.save(bookBuilder());
+		Book book = bookBuilder();
+		book.setAuthor("author1");
+		bookRepository.save(book);
 
-		mockMvc.perform(get("/api/books")
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-					.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-						.andExpect(jsonPath("$[0].author", is(AUTHOR)));
+		mockMvc.perform(get("/api/books").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$[0].author", is("author1")));
 	}
 
 	@Test
 	public void findByAuthor() throws Exception {
-		bookRepository.save(bookBuilder());
+		Book book = bookBuilder();
+		book.setAuthor("author2");
+		bookRepository.save(book);
 
-		mockMvc.perform(get("/api/books/author/{author}", AUTHOR)
-				.contentType(MediaType.APPLICATION_JSON))
-					.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-						.andExpect(jsonPath("$.isbn", is(ISBN)));
+		mockMvc.perform(get("/api/books/author/{author}", "author2").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.isbn", is(ISBN)));
 	}
-
 
 
 	@Test
 	public void deleteBook() throws Exception {
-		bookRepository.save(bookBuilder());
+		Book book = bookBuilder();
+		book.setAuthor("author3");
+		bookRepository.save(book);
 
-		mockMvc.perform(delete("/api/books/{id}", ID_USER)
-				.accept(MediaType.APPLICATION_JSON))
-					.andExpect(status().isOk());
+		mockMvc.perform(delete("/api/books/{id}", ID_USER).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
 	}
 
 	@Test
 	public void updateBook() throws Exception {
-		Book book = bookRepository.save(bookBuilder());
+
+		Book book = bookBuilder();
+		book.setAuthor("author5");
+		bookRepository.save(book);
 		book.setAuthor("Marcelo");
 		book.setUsers(null);
 
-		mockMvc.perform(put("/api/books/{id}",ID_USER)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtil.asJsonString(book)))
-				.andExpect(status().isOk()).andExpect(jsonPath("$.author", is("Marcelo")));;
+		mockMvc.perform(put("/api/books/{id}", ID_USER).contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.asJsonString(book))).andExpect(status().isOk())
+				.andExpect(jsonPath("$.author", is("Marcelo")));
+		;
 
 	}
-
 
 
 }
