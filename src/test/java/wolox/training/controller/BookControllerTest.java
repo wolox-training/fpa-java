@@ -83,30 +83,4 @@ public class BookControllerTest {
 				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.isbn", is(ISBN)));
 	}
-
-
-	@Test
-	public void deleteBook() throws Exception {
-		Book book = bookBuilder();
-		book.setAuthor("author3");
-		bookRepository.save(book);
-
-		mockMvc.perform(delete("/api/books/{id}", ID_USER).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
-	}
-
-	@Test
-	public void updateBook() throws Exception {
-
-		Book book = bookBuilder();
-		book.setAuthor("author5");
-		bookRepository.save(book);
-		book.setAuthor("Marcelo");
-		book.setUsers(null);
-
-		mockMvc.perform(put("/api/books/{id}", ID_USER).contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtil.asJsonString(book))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.author", is("Marcelo")));
-
-	}
 }

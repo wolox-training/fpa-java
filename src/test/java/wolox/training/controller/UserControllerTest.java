@@ -76,29 +76,4 @@ public class UserControllerTest {
 				.content(JsonUtil.asJsonString(user))).andExpect(status().isCreated());
 	}
 
-	@Test
-	public void deleteUser() throws Exception {
-		User user = userBuilder();
-		user.setUsername("USERNAME3");
-		userRepository.save(user);
-
-		mockMvc.perform(delete("/api/users/{id}", ID_USER).accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
-	}
-
-	@Test
-	public void updateUser() throws Exception {
-		User user = userBuilder();
-		user.setUsername("USERNAME3");
-		User userSave = userRepository.save(user);
-
-		userSave.setName("marcelo");
-
-		mockMvc.perform(put("/api/users/{id}", ID_USER).contentType(MediaType.APPLICATION_JSON)
-				.content(JsonUtil.asJsonString(userSave))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.name", is("marcelo")));
-
-	}
-
-
 }
