@@ -20,15 +20,20 @@ public class UserRepositoryTest {
 	@Autowired
 	private UserRepository userRepository;
 
-	private User userOneTest = new User(1l, "PACHECO", "Francisco Javier", LocalDate.now(), Arrays.asList());
-
-	private User userTwoTest = new User();
-
 	@Test
 	public void whenCreateUser_thenUserIsPersisted() {
+
+		//Arrange
+		User userOneTest = new User();
+		userOneTest.setId(1l);
+		userOneTest.setName("Francisco Javier");
+		userOneTest.setUsername("PACHECO");
+		userOneTest.setBirthdate(LocalDate.now());
+		userOneTest.setBooks(Arrays.asList());
 		//Act
 		userRepository.save(userOneTest);
 		User user = userRepository.findByUsername("PACHECO").orElse(new User());
+
 		//Assert
 		assertThat(user.getUsername().equals(userOneTest.getUsername())).isTrue();
 		assertThat(user.getName().equals(userOneTest.getName())).isTrue();
@@ -37,7 +42,11 @@ public class UserRepositoryTest {
 
 	@Test
 	public void whenCreateUserWithoutUsername_thenThrowException() {
+
+		//Arrange
+		User userTwoTest = new User();
 		String message = "username field cannot be null";
+
 		//Act - Assert
 		assertThatThrownBy(() -> Preconditions.checkNotNull(userTwoTest.getUsername(), message))
 				.isInstanceOf(NullPointerException.class).hasMessage(message).hasNoCause();
