@@ -1,9 +1,11 @@
 package wolox.training.repositories;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.google.common.base.Preconditions;
 import java.time.LocalDate;
 import java.util.Arrays;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -18,27 +20,35 @@ public class UserRepositoryTest {
 	@Autowired
 	private UserRepository userRepository;
 
-	private User userOneTest = new User(1l, "PACHECO", "Francisco Javier", LocalDate.now(), Arrays.asList());
-
-	private User userTwoTest =new User();
-
 	@Test
 	public void whenCreateUser_thenUserIsPersisted() {
+
+		//Arrange
+		User userOneTest = new User();
+		userOneTest.setId(1l);
+		userOneTest.setName("Francisco Javier");
+		userOneTest.setUsername("PACHECO");
+		userOneTest.setBirthdate(LocalDate.now());
+		userOneTest.setBooks(Arrays.asList());
 		//Act
 		userRepository.save(userOneTest);
 		User user = userRepository.findByUsername("PACHECO").orElse(new User());
+
 		//Assert
-		Assertions.assertThat(user.getUsername().equals(userOneTest.getUsername())).isTrue();
-		Assertions.assertThat(user.getName().equals(userOneTest.getName())).isTrue();
-		Assertions.assertThat(user.getBooks().size() == (userOneTest.getBooks().size())).isTrue();
+		assertThat(user.getUsername().equals(userOneTest.getUsername())).isTrue();
+		assertThat(user.getName().equals(userOneTest.getName())).isTrue();
+		assertThat(user.getBooks().size() == (userOneTest.getBooks().size())).isTrue();
 	}
 
 	@Test
 	public void whenCreateUserWithoutUsername_thenThrowException() {
+
+		//Arrange
+		User userTwoTest = new User();
 		String message = "username field cannot be null";
+
 		//Act - Assert
-		Assertions.assertThatThrownBy(() -> Preconditions.checkNotNull(userTwoTest.getUsername(), message))
-				.isInstanceOf(NullPointerException.class)
-				.hasMessage(message).hasNoCause();
+		assertThatThrownBy(() -> Preconditions.checkNotNull(userTwoTest.getUsername(), message))
+				.isInstanceOf(NullPointerException.class).hasMessage(message).hasNoCause();
 	}
 }
