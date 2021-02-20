@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.NotificationCode;
@@ -28,8 +29,7 @@ import wolox.training.exceptions.NotificationCode;
 @Entity
 @Table(name = "users")
 @ApiModel(description = "Users from the OpenLibrary")
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class User {
