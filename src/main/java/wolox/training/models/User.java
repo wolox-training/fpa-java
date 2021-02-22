@@ -49,8 +49,6 @@ public class User {
 
 	@NotNull
 	@Column(nullable = false)
-	@JsonDeserialize(using = LocalDateDeserializer.class)
-	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate birthdate;
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
