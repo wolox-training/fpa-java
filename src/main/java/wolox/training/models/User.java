@@ -1,6 +1,5 @@
 package wolox.training.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
@@ -36,7 +35,6 @@ public class User {
 	private String name;
 
 	@Column(nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthdate;
 
 	@ManyToMany(cascade = CascadeType.PERSIST)
