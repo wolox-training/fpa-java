@@ -29,7 +29,6 @@ import wolox.training.models.User;
 import wolox.training.repositories.UserRepository;
 import wolox.training.utils.JsonUtil;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
