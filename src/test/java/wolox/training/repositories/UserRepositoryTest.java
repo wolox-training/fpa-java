@@ -35,8 +35,8 @@ public class UserRepositoryTest {
 		User user = userRepository.findByUsername("PACHECO").orElse(new User());
 
 		//Assert
-		assertThat(user.getUsername().equals(userOneTest.getUsername())).isTrue();
-		assertThat(user.getName().equals(userOneTest.getName())).isTrue();
+		assertThat(user.getUsername()).isEqualTo(userOneTest.getUsername());
+		assertThat(user.getName()).isEqualTo(userOneTest.getName());
 		assertThat(user.getBooks().size() == (userOneTest.getBooks().size())).isTrue();
 	}
 
