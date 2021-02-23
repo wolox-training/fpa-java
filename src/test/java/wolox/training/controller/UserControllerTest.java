@@ -29,7 +29,6 @@ import wolox.training.utils.JsonUtil;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTest {

@@ -30,7 +30,6 @@ import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 import wolox.training.utils.JsonUtil;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class BookControllerTest {
