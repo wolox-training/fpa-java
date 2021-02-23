@@ -4,8 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,8 @@ import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.DataNotFoundException;
 import wolox.training.exceptions.IdMismatchException;
 import wolox.training.exceptions.NotificationCode;
+import wolox.training.external.delegate.OpenLibreryDelegate;
+import wolox.training.external.dto.BookInfoDto;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
@@ -32,6 +36,9 @@ public class BookController {
 
 	@Autowired
 	private BookRepository bookRepository;
+
+	@Autowired
+	private OpenLibreryDelegate openLibreryDelegate;
 
 
 	/**
@@ -115,9 +122,17 @@ public class BookController {
 	/**
 	 * This method is to find a book by isbn
 	 * @param isbn: author of the book (Object)
-	 * @return {@link BookDto}
+	 * @return {@link BookInfoDto}
 	 */
-
+	@GetMapping("/isbn/{isbn}")
+	public Object findBookByIsbn(@PathVariable  String isbn){
+		BookInfoDto book= openLibreryDelegate.findBookByIsbn(isbn);
+		if(book!= null){
+			return  book;
+		}else{
+			return bookRepository.findByIsbn(isbn);
+		}
+	}
 
 
 }
