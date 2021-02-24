@@ -4,23 +4,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
-import wolox.training.exceptions.BookAlreadyOwnedException;
-import wolox.training.exceptions.NotificationCode;
 import wolox.training.client.dto.BookInfoDto;
 import wolox.training.client.feing.OpenLibraryFeingClient;
+import wolox.training.exceptions.BookAlreadyOwnedException;
+import wolox.training.exceptions.DataNotFoundException;
+import wolox.training.exceptions.NotificationCode;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
 @Component
 public class OpenLibraryDelegate {
 
-	private final BookRepository bookRepository;
-
 	private static final String FORMAT = "json";
 	private static final String JSCMD = "data";
 	private static final String ISBN_PARAM = "ISBN:";
 
 	private final ObjectMapper objectMapper;
+	private final BookRepository bookRepository;
 	private final OpenLibraryFeingClient openLibraryFeingClient;
 
 	public OpenLibraryDelegate(BookRepository bookRepository, ObjectMapper objectMapper,
@@ -37,13 +37,14 @@ public class OpenLibraryDelegate {
 
 		HashMap<String, Object> bookInfoResponse = openLibraryFeingClient
 				.findAllBooksByIsbn(isbnParam.toString(), FORMAT, JSCMD);
+
 		if (!bookInfoResponse.isEmpty()) {
 			BookInfoDto bookInfoDto = objectMapper
 					.convertValue(bookInfoResponse.get(isbnParam.toString()), BookInfoDto.class);
 
 			return saveBookOpenLibrary(bookInfoDto, isbn);
 		}
-		return Optional.empty();
+		throw new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND);
 	}
 
 	private Optional<Book> saveBookOpenLibrary(BookInfoDto bookInfoDto, String isbn) {
@@ -61,6 +62,5 @@ public class OpenLibraryDelegate {
 			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
 		}
 		return Optional.ofNullable(bookRepository.save(book));
-
 	}
 }
