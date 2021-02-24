@@ -22,7 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.controllers.BookController;
-import wolox.training.external.delegate.OpenLibreryDelegate;
+import wolox.training.client.delegate.OpenLibraryDelegate;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 import wolox.training.utils.JsonUtil;
@@ -37,7 +37,7 @@ public class BookControllerTest {
 	private BookRepository bookRepository;
 
 	@MockBean
-	private OpenLibreryDelegate openLibreryDelegate;
+	private OpenLibraryDelegate openLibraryDelegate;
 
 	private Book bookBuilder;
 

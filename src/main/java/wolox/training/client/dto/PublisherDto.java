@@ -1,4 +1,4 @@
-package wolox.training.external.dto;
+package wolox.training.client.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
