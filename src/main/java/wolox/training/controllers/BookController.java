@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import wolox.training.client.delegate.OpenLibraryDelegate;
-import wolox.training.client.dto.BookInfoDto;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.DataNotFoundException;
 import wolox.training.exceptions.IdMismatchException;
 import wolox.training.exceptions.NotificationCode;
+import wolox.training.client.delegate.OpenLibraryDelegate;
+import wolox.training.client.dto.BookInfoDto;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
@@ -135,33 +135,13 @@ public class BookController {
 	 *
 	 * @param isbn: author of the book (Object)
 	 *
-	 * @return {@link Book}
+	 * @return {@link BookInfoDto}
 	 */
 
 	@GetMapping("/isbn/{isbn}")
 	public ResponseEntity<Book> findBookByIsbn(@PathVariable String isbn) {
-
-		Optional<Book> book = bookRepository.findByIsbn(isbn);
-		if (book.isPresent()) {
-			return new ResponseEntity<>(book.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(openLibraryDelegate.findBookByIsbn(isbn).get(), HttpStatus.CREATED);
-		}
+		return bookRepository.findByIsbn(isbn).map(book -> new ResponseEntity<>(book, HttpStatus.OK))
+				.orElseGet(() -> new ResponseEntity<>(openLibraryDelegate.findBookByIsbn(isbn), HttpStatus.CREATED));
 	}
 
-	/**
-	 * This method is to find a book by publisher and genre and year
-	 *
-	 * @param publisher: publisher of the book (Object)
-	 * @param genre: genre of the book (Object)
-	 * @param year: year of the book (Object)
-	 * @return {@link Book}
-	 */
-
-	@GetMapping("/parameters")
-	public Book findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre,
-			@RequestParam String year) {
-		return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year)
-				.orElseThrow(() -> new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND));
-	}
 }
