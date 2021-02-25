@@ -27,6 +27,8 @@ import wolox.training.repositories.UserRepository;
 @RequestMapping("/api/users")
 public class UserController {
 
+	private static  final  String DATE_FORMAT ="yyyy-MM-dd";
+
 	@Autowired
 	private UserRepository usersRepository;
 
@@ -142,8 +144,8 @@ public class UserController {
 	 */
 	@GetMapping("/date")
 	public List<User> findByBirthdateBetween(
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-			@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate endDate,
+			@RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDate startDate,
+			@DateTimeFormat(pattern = DATE_FORMAT) @RequestParam LocalDate endDate,
 			@RequestParam String name) {
 
 		return usersRepository.findByBirthdateBetweenAndNameIgnoreCase(startDate, endDate, name);
