@@ -2,11 +2,9 @@ package wolox.training.client.delegate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
-import java.util.Optional;
 import org.springframework.stereotype.Component;
 import wolox.training.client.dto.BookInfoDto;
 import wolox.training.client.feing.OpenLibraryFeingClient;
-import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.DataNotFoundException;
 import wolox.training.exceptions.NotificationCode;
 import wolox.training.models.Book;
@@ -30,7 +28,7 @@ public class OpenLibraryDelegate {
 		this.openLibraryFeingClient = openLibraryFeingClient;
 	}
 
-	public Optional<Book> findBookByIsbn(String isbn) {
+	public Book findBookByIsbn(String isbn) {
 		StringBuilder isbnParam = new StringBuilder();
 		isbnParam.append(ISBN_PARAM);
 		isbnParam.append(isbn);
@@ -47,7 +45,7 @@ public class OpenLibraryDelegate {
 		throw new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND);
 	}
 
-	private Optional<Book> saveBookOpenLibrary(BookInfoDto bookInfoDto, String isbn) {
+	private Book saveBookOpenLibrary(BookInfoDto bookInfoDto, String isbn) {
 		Book book = new Book();
 		book.setIsbn(isbn);
 		book.setAuthor(bookInfoDto.getAuthors().get(0).getName());
@@ -58,9 +56,6 @@ public class OpenLibraryDelegate {
 		book.setImage("img");
 		book.setGenre("M");
 		book.setTitle(bookInfoDto.getTitle());
-		if (bookRepository.findByIsbn(book.getIsbn()).isPresent()) {
-			throw new BookAlreadyOwnedException(NotificationCode.BOOK_ALREADY_OWNED);
-		}
-		return Optional.ofNullable(bookRepository.save(book));
+		return bookRepository.save(book);
 	}
 }

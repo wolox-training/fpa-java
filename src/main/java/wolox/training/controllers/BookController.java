@@ -140,14 +140,7 @@ public class BookController {
 
 	@GetMapping("/isbn/{isbn}")
 	public ResponseEntity<Book> findBookByIsbn(@PathVariable String isbn) {
-
-		Optional<Book> book = bookRepository.findByIsbn(isbn);
-		if (book.isPresent()) {
-			return new ResponseEntity<>(book.get(),HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(openLibraryDelegate.findBookByIsbn(isbn).get(),HttpStatus.CREATED);
-		}
+		return bookRepository.findByIsbn(isbn).map(book -> new ResponseEntity<>(book, HttpStatus.OK))
+				.orElseGet(() -> new ResponseEntity<>(openLibraryDelegate.findBookByIsbn(isbn), HttpStatus.CREATED));
 	}
-
-
 }
