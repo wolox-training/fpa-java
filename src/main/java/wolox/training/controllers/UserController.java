@@ -145,7 +145,7 @@ public class UserController {
 	public List<User> findByBirthdateBetweenAndNameContainingIgnoreCase(
 			@RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDate startDate,
 			@DateTimeFormat(pattern = DATE_FORMAT) @RequestParam LocalDate endDate,
-			@RequestParam String name) {
+			@RequestParam(required = false) String name) {
 
 		return usersRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(startDate, endDate, name);
 
