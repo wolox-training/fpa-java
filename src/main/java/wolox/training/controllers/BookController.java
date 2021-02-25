@@ -143,5 +143,20 @@ public class BookController {
 		return bookRepository.findByIsbn(isbn).map(book -> new ResponseEntity<>(book, HttpStatus.OK))
 				.orElseGet(() -> new ResponseEntity<>(openLibraryDelegate.findBookByIsbn(isbn), HttpStatus.CREATED));
 	}
+	/**
+	 * This method is to find a book by publisher and genre and year
+	 *
+	 * @param publisher: publisher of the book (Object)
+	 * @param genre: genre of the book (Object)
+	 * @param year: year of the book (Object)
+	 * @return {@link Book}
+	 */
+
+	@GetMapping("/parameters")
+	public Book findByPublisherAndGenreAndYear(@RequestParam String publisher, @RequestParam String genre,
+			@RequestParam String year) {
+		return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year)
+				.orElseThrow(() -> new DataNotFoundException(NotificationCode.BOOK_DATA_NOT_FOUND));
+	}
 
 }
