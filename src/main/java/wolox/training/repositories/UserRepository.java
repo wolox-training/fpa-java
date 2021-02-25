@@ -10,6 +10,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	Optional<User> findByUsername(String username);
 
-	List<User> findByBirthdateBetweenAndNameIgnoreCase(LocalDate startDate, LocalDate endDate,String name);
+	List<User> findByBirthdateBetweenAndNameContainingIgnoreCase(LocalDate startDate, LocalDate endDate,String name);
 
 }
