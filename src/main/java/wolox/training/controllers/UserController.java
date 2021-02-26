@@ -143,9 +143,9 @@ public class UserController {
 	 */
 	@GetMapping("/date")
 	public List<User> findByBirthdateBetweenAndNameContainingIgnoreCase(
-			@RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDate startDate,
-			@DateTimeFormat(pattern = DATE_FORMAT) @RequestParam LocalDate endDate,
-			@RequestParam String name) {
+			@RequestParam(required = false) @DateTimeFormat(pattern = DATE_FORMAT) LocalDate startDate,
+			@DateTimeFormat(pattern = DATE_FORMAT) @RequestParam(required = false) LocalDate endDate,
+			@RequestParam(required = false) String name) {
 
 		return usersRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(startDate, endDate, name);
 

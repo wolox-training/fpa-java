@@ -12,8 +12,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	Optional<User> findByUsername(String username);
 
-	@Query("SELECT u FROM User u WHERE (u.birthdate BETWEEN :startDate  AND :endDate) and (lower(u.name) like lower(concat('%', :name,'%')))")
-	List<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@Param("startDate") LocalDate startDate,
-			@Param("endDate") LocalDate endDate, @Param("name") String name);
+	@Query("SELECT u FROM User u WHERE (CAST(:dtCancelInitial AS java.time.LocalDateTime) IS NULL OR (u.birthdate >= "
+			+ ":dtCancelInitial AND u.birthdate <= :dtCancelFinal))  "
+			+ "and  (:name is null or (lower(u.name) like concat('%', lower(CAST(:name as java.lang.String)),'%')))")
+
+	List<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@Param("dtCancelInitial") LocalDate startDate,
+			@Param("dtCancelFinal") LocalDate endDate,  String name);
 
 }
