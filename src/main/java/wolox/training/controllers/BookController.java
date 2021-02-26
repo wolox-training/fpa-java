@@ -171,7 +171,7 @@ public class BookController {
 	 * @param title:     title of the book   (String)
 	 * @param subtitle:  subtitle of the book   (String)
 	 * @param page:    	 page of the book   (Integer)
-	 * @param author:    isbn of the book   (String)
+	 * @param isbn:    isbn of the book   (String)
 	 *
 	 * @return {@link List<Book>}
 	 */
