@@ -151,13 +151,37 @@ public class BookController {
 	 * @param genre:     genre of the book (Object)
 	 * @param year:      year of the book (Object)
 	 *
-	 * @return {@link Book}
+	 * @return {@link List<Book>}
 	 */
 
 	@GetMapping("/parameters")
 	public List<Book> findByPublisherAndGenreAndYear(@RequestParam(required = false) String publisher,
 			@RequestParam(required = false) String genre, @RequestParam(required = false) String year) {
 		return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year);
+	}
+
+	/**
+	 * This method is to find a book by all parameters
+	 *
+	 * @param publisher: publisher of the book (String)
+	 * @param genre:     genre of the book (String)
+	 * @param year:      year of the book (String)
+	 * @param author:    author of the book   (String)
+	 * @param image:     image of the book   (String)
+	 * @param title:     title of the book   (String)
+	 * @param subtitle:  subtitle of the book   (String)
+	 * @param page:    	 page of the book   (Integer)
+	 * @param isbn:    isbn of the book   (String)
+	 *
+	 * @return {@link List<Book>}
+	 */
+	@GetMapping("/all-parameters")
+	public List<Book> findAll(@RequestParam(required = false) String publisher,
+			@RequestParam(required = false) String genre, @RequestParam(required = false) String year,
+			@RequestParam(required = false) String author, @RequestParam(required = false) String image,
+			@RequestParam(required = false) String title, @RequestParam(required = false) String subtitle,
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) String isbn) {
+		return bookRepository.findAll(publisher, genre, year, author, image, title, subtitle, page, isbn);
 	}
 
 }
