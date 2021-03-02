@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -155,9 +157,13 @@ public class BookController {
 	 */
 
 	@GetMapping("/parameters")
-	public List<Book> findByPublisherAndGenreAndYear(@RequestParam(required = false) String publisher,
-			@RequestParam(required = false) String genre, @RequestParam(required = false) String year) {
-		return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year);
+	public Page<Book> findByPublisherAndGenreAndYear(@RequestParam(required = false) String publisher,
+			@RequestParam(required = false) String genre, @RequestParam(required = false) String year,
+			@RequestParam(defaultValue = "0") Integer numberParam,
+			@RequestParam(defaultValue = "200") Integer pageNumParam) {
+
+		return bookRepository
+				.findByPublisherAndGenreAndYear(publisher, genre, year, PageRequest.of(numberParam, pageNumParam));
 	}
 
 	/**
@@ -170,18 +176,20 @@ public class BookController {
 	 * @param image:     image of the book   (String)
 	 * @param title:     title of the book   (String)
 	 * @param subtitle:  subtitle of the book   (String)
-	 * @param page:    	 page of the book   (Integer)
-	 * @param isbn:    isbn of the book   (String)
+	 * @param page:      page of the book   (Integer)
+	 * @param isbn:      isbn of the book   (String)
 	 *
 	 * @return {@link List<Book>}
 	 */
 	@GetMapping("/all-parameters")
-	public List<Book> findAll(@RequestParam(required = false) String publisher,
+	public Page<Book> findAll(@RequestParam(required = false) String publisher,
 			@RequestParam(required = false) String genre, @RequestParam(required = false) String year,
 			@RequestParam(required = false) String author, @RequestParam(required = false) String image,
 			@RequestParam(required = false) String title, @RequestParam(required = false) String subtitle,
-			@RequestParam(required = false) Integer page, @RequestParam(required = false) String isbn) {
-		return bookRepository.findAll(publisher, genre, year, author, image, title, subtitle, page, isbn);
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) String isbn,
+			@RequestParam(defaultValue = "0") Integer numberParam,
+			@RequestParam(defaultValue = "200") Integer pageNumParam) {
+		return bookRepository.findAll(publisher, genre, year, author, image, title, subtitle, page, isbn,PageRequest.of(numberParam, pageNumParam));
 	}
 
 }
