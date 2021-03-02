@@ -3,6 +3,8 @@ package wolox.training.controllers;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +28,7 @@ import wolox.training.repositories.UserRepository;
 @RequestMapping("/api/users")
 public class UserController {
 
-	private static  final  String DATE_FORMAT ="yyyy-MM-dd";
+	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	@Autowired
 	private UserRepository usersRepository;
@@ -137,17 +139,20 @@ public class UserController {
 	 * This method is to create a books to user
 	 *
 	 * @param startDate: Birthdate start (LocalDate)
-	 * @param endDate: Birthdate end (LocalDate)
-	 * @param name: name User (String)
+	 * @param endDate:   Birthdate end (LocalDate)
+	 * @param name:      name User (String)
+	 *
 	 * @return {@link List<User>}
 	 */
 	@GetMapping("/date")
-	public List<User> findByBirthdateBetweenAndNameContainingIgnoreCase(
+	public Page<User> findByBirthdateBetweenAndNameContainingIgnoreCase(
 			@RequestParam(required = false) @DateTimeFormat(pattern = DATE_FORMAT) LocalDate startDate,
 			@DateTimeFormat(pattern = DATE_FORMAT) @RequestParam(required = false) LocalDate endDate,
-			@RequestParam(required = false) String name) {
+			@RequestParam(required = false) String name, @RequestParam(defaultValue = "0") Integer numberParam,
+			@RequestParam(defaultValue = "200") Integer pageNumParam) {
 
-		return usersRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(startDate, endDate, name);
+		return usersRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(startDate, endDate, name,
+				PageRequest.of(numberParam, pageNumParam));
 
 	}
 }
