@@ -40,6 +40,13 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.16'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	//----------- Local Profile
+	compileOnly "com.github.tomakehurst:wiremock-jre8:2.23.2"
+	runtime "com.github.tomakehurst:wiremock-jre8:2.23.2"
+
+//--------- TEST ---------
+	testCompile "com.github.tomakehurst:wiremock-jre8:2.23.2"
 }
 
 test {
